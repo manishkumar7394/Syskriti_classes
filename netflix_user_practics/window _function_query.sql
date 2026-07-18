@@ -1,20 +1,28 @@
+
 -- 8. Window Functions Practice (20 Questions)
 
+
 -- 1. Rank users by watch time.
-select user_id, avg_watch_time_minutes, 
-rank () over (order by avg_watch_time_minutes ) as watch_time
+select
+	user_id,
+	avg_watch_time_minutes,
+	rank () over (order by avg_watch_time_minutes ) as watch_time
 from netflix_user
 order by watch_time desc
 
+	
 -- 2. Dense rank users by ratings.
 select user_id, rating_given, 
 dense_rank() over (order by rating_given desc) as rating_dense_rank
 from netflix_user 
 
+	
 -- 3. Find top users per country.
 with top_user as (
 select user_id, country, avg_watch_time_minutes,
-rank() over (partition by country order by avg_watch_time_minutes desc) as rnkk
+rank() over (partition by country 
+	order by avg_watch_time_minutes desc) as rnkk
+	
 from netflix_user
 )
 select * from top_user
@@ -61,6 +69,8 @@ group by favorite_genre
 select user_id, avg_watch_time_minutes,
 lag(avg_watch_time_minutes) over (order by user_id)
 from netflix_user
+
+	
 -- 9. Find next user’s rating.
 select user_id, rating_given,
 lead(rating_given) over (order by user_id) as next_user
@@ -87,6 +97,7 @@ from netflix_User
 select * from top_binge_watcher
 where rank_binge = 1;
 
+
 -- 12. Calculate percentage contribution of revenue.
 SELECT
     user_id,
@@ -97,6 +108,8 @@ SELECT
         2
     ) AS revenue_percentage
 from Netflix_User
+
+	
 -- 13. Rank users by interactions.
 select 
 	user_id,
@@ -114,6 +127,8 @@ select
 		over(order by user_id)
 	::numeric, 2) as avg_watcher
 from netflix_user
+
+	
 -- 15. Find highest rated user per genre.
 with highest_rated as (
 select 
